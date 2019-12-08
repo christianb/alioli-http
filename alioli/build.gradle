@@ -35,26 +35,21 @@ android {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-//    implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation "androidx.work:work-runtime-ktx:2.2.0"
-    implementation "androidx.arch.core:core-runtime:2.1.0"
-    implementation "androidx.arch.core:core-common:2.1.0"
-    implementation "com.jakewharton.timber:timber:4.7.1"
-    implementation "com.squareup.okhttp3:okhttp:3.11.0"
-    implementation "com.google.code.gson:gson:2.8.6"
-//    implementation 'androidx.core:core-ktx:1.1.0'
+    implementation Libs.kotlin_stdlib_jdk7
+    implementation Libs.work_runtime_ktx
+    implementation Libs.core_runtime
+    implementation Libs.core_common
+    implementation Libs.timber
+    implementation Libs.okhttp
+    implementation Libs.gson
 
-    kapt "androidx.room:room-compiler:2.0.0"
+    kapt Libs.room_compiler
 
-    testImplementation 'junit:junit:4.12'
-    testImplementation "io.mockk:mockk:1.8.13"
-    testImplementation "org.assertj:assertj-core:3.14.0"
+    testImplementation Libs.junit_junit
+    testImplementation Libs.mockk
+    testImplementation Libs.assertj_core
 
-    androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
-    androidTestImplementation "androidx.test:runner:1.2.0"
-    androidTestImplementation "io.mockk:mockk-android:1.8.13"
-
-//    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
-//    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    androidTestImplementation Libs.core_testing
+    androidTestImplementation Libs.androidx_test_runner
+    androidTestImplementation Libs.mockk_android
 }
