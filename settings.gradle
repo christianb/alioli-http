@@ -1,2 +1,2 @@
-include ':app', ':alioli-http'
+include ':alioli-http'
 rootProject.name='alioli'
