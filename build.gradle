@@ -28,3 +28,5 @@ task clean(type: Delete) {
 }
 
 apply plugin: "de.fayard.buildSrcVersions"
+apply from: 'https://raw.githubusercontent.com/sensorberg-dev/gradle-scripts/master/common-def.gradle'
+apply from: 'https://raw.githubusercontent.com/sensorberg-dev/gradle-scripts/master/add_private_maven_repo_to_project.gradle'
