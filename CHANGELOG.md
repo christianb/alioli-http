@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 0.3.0 - (unreleased)
 * Added: Changelog
 * Added: README.md
+* Changed: Save request to DB (to be executed later by WorkManager) only when response was not successful or an
+  Exception was thrown.
 
 ## 0.2.0 - 2019-12-8
 * Added: First release
