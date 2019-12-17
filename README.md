@@ -41,10 +41,9 @@ OkHttpClient.Builder().apply {
 }.build()
 ```
 
-The interceptor will look for the header name: `x-alioli-http-valid-until`. If it finds one, it will save that request
-to the local database. Then it proceeds the request. If the response was successful the entry for the request in the
-database is being deleted. If the response fails it will enqueue a one time work request to the WorkManager with a
-default delay of 15 minutes.
+The interceptor will look for the header name: `x-alioli-http-valid-until`. If the header is not set, it will proceed
+the request normally without any further action. If the head is set, it proceeds the request. If the response fails or
+an exception was thrown it will enqueue a one time work request to the WorkManager with a default delay of 15 minutes.
 
 **Note: The AlioliHttpInterceptor should be the last application interceptor! Reason, if you have other following
 interceptors they might change the request. So the request, saved to the local database and being executed later by the
