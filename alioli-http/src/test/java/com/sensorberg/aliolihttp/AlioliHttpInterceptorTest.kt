@@ -48,7 +48,7 @@ class AlioliHttpInterceptorTest {
 	}
 
 	@Test
-	fun `intercept should add request to DB when its deferrable`() {
+	fun `intercept should add request to DB when its deferrable and response failed`() {
 		val request: Request = mockRequest()
 		val response: Response = mockResponse(successful = false)
 		val chain: Interceptor.Chain = mockChain(request, response)
@@ -61,32 +61,21 @@ class AlioliHttpInterceptorTest {
 	}
 
 	@Test
-	fun `intercept should delete request from DB when response is successful`() {
-		val id = 43L
+	fun `intercept should add request to DB when its deferrable and exception happened while executing response`() {
 		val request: Request = mockRequest()
-		val response: Response = mockResponse(successful = true)
-		val chain: Interceptor.Chain = mockChain(request, response)
-		val dao: AlioliHttpDao = mockDao(relaxed = true) {
-			every { insert(any()) } returns id
+		val chain: Interceptor.Chain = mockk {
+			every { request() } returns request
+			every { proceed(request) } throws Exception()
+		}
+		val dao: AlioliHttpDao = mockDao(relaxed = true)
+
+		try {
+			classToTest.intercept(chain)
+		} catch (e: java.lang.Exception) {
+			// ignore thrown exception
 		}
 
-		val result: Response = classToTest.intercept(chain)
-
-		assertThat(result).isEqualTo(response)
-		verify { dao.delete(id) }
-	}
-
-	@Test
-	fun `intercept should add request to DB when request is deferrable and not successful`() {
-		val request: Request = mockRequest()
-		val response: Response = mockResponse(successful = false)
-		val chain: Interceptor.Chain = mockChain(request, response)
-		val dao: AlioliHttpDao = mockDao(relaxed = true)
-
-		val result: Response = classToTest.intercept(chain)
-
-		assertThat(result).isEqualTo(response)
-		verify { dao.insert(any()) }
+		verify(exactly = 1) { dao.insert(any()) }
 	}
 
 	@Test

@@ -27,24 +27,22 @@ internal class AlioliHttpInterceptor(private val context: Context,
 
 		val database: AlioliHttpDatabase = AlioliHttpDatabaseProvider.getDatabase(context)
 		val dao: AlioliHttpDao = database.getAlioliHttpDao()
-		val id: Long = saveToDao(request, dao)
 
-		return safelyProceedRequest(chain, request, dao, id)
+		return safelyProceedRequest(chain, request, dao)
 	}
 
-	private fun safelyProceedRequest(chain: Interceptor.Chain, request: Request, dao: AlioliHttpDao, idToDelete: Long): Response {
+	private fun safelyProceedRequest(chain: Interceptor.Chain, request: Request, dao: AlioliHttpDao): Response {
 		try {
 			val response: Response = chain.proceed(request)
-			if (response.isSuccessful) {
-				Timber.d("Alioli: response success ${request.url()}")
-				dao.delete(idToDelete)
-			} else {
+			if (!response.isSuccessful) {
+				saveToDao(request, dao)
 				Timber.d("Alioli: response not success ${request.url()}. Enqueueing")
 				AlioliHttpWorker.enqueue(backoffDelay, timeUnit)
 			}
 			return response
 		} catch (exception: Throwable) {
 			Timber.d("Alioli: response fail with ${exception.message} for ${request.url()}. Enqueueing")
+			saveToDao(request, dao)
 			AlioliHttpWorker.enqueue(backoffDelay, timeUnit)
 			throw exception
 		}
