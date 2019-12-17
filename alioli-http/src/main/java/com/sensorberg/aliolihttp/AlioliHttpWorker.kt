@@ -108,6 +108,7 @@ internal class AlioliHttpWorker(private val context: Context,
 
 		internal fun enqueue(backoffDelay: Long,
 							 timeUnit: TimeUnit) {
+			Timber.d("enqueue workRequest")
 			val oneTimeWorkRequest: OneTimeWorkRequest = createWorkRequest(backoffDelay, timeUnit)
 
 			AlioliHttpWorkManagerProvider.getWorkManager().enqueueUniqueWork(

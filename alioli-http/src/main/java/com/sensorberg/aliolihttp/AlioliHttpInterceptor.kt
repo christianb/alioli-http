@@ -36,12 +36,12 @@ internal class AlioliHttpInterceptor(private val context: Context,
 			val response: Response = chain.proceed(request)
 			if (!response.isSuccessful) {
 				saveToDao(request, dao)
-				Timber.d("Alioli: response not success ${request.url()}. Enqueueing")
+				Timber.d("Alioli: response not success ${request.url()}")
 				AlioliHttpWorker.enqueue(backoffDelay, timeUnit)
 			}
 			return response
 		} catch (exception: Throwable) {
-			Timber.d("Alioli: response fail with ${exception.message} for ${request.url()}. Enqueueing")
+			Timber.d("Alioli: response fail with ${exception.message} for ${request.url()}")
 			saveToDao(request, dao)
 			AlioliHttpWorker.enqueue(backoffDelay, timeUnit)
 			throw exception
